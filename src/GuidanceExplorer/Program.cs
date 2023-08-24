@@ -5,6 +5,8 @@ using GuidanceExplorer.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSemanticKernel();
+builder.Services.Configure<LanguageModelOptions>(builder.Configuration.GetSection("LanguageModel"));
+builder.Services.Configure<MemoryOptions>(builder.Configuration.GetSection("Memory"));
 
 var app = builder.Build();
 
