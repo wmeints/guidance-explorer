@@ -23,6 +23,7 @@ public class LanguageService: ILanguageService
         
         context.Variables.Set("history", FormatChatHistory(history));
         context.Variables.Set("memory", memoryInformation);
+        context.Variables.Set("input", prompt);
         
         var output = await skills["Converse"].InvokeAsync(context);
 
@@ -44,11 +45,11 @@ public class LanguageService: ILanguageService
     private async Task<string> QueryMemoryAsync(string prompt)
     {
         var outputBuilder = new StringBuilder();
-        var results = _kernel.Memory.SearchAsync("guidance", prompt);
+        var results = _kernel.Memory.SearchAsync("guidance", prompt, limit: 10, minRelevanceScore: 0.7);
 
         await foreach (var item in results)
         {
-            var itemId = item.Metadata.Id;
+            outputBuilder.AppendLine(item.Metadata.Text);
         }
 
         return outputBuilder.ToString();

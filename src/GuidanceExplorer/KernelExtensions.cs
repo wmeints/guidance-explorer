@@ -19,10 +19,10 @@ public static class KernelExtensions
 
         var kernel = Kernel.Builder
             .WithQdrantMemoryStore(memoryOptions.Value.Endpoint, memoryOptions.Value.VectorSize)
-            .WithAzureChatCompletionService(languageModelOptions.Value.Endpoint,
-                languageModelOptions.Value.ChatDeploymentName, languageModelOptions.Value.ApiKey)
-            .WithAzureTextEmbeddingGenerationService(languageModelOptions.Value.Endpoint,
-                languageModelOptions.Value.EmbeddingDeploymentName, languageModelOptions.Value.ApiKey)
+            .WithAzureChatCompletionService(languageModelOptions.Value.ChatDeploymentName,
+                languageModelOptions.Value.Endpoint, languageModelOptions.Value.ApiKey)
+            .WithAzureTextEmbeddingGenerationService(languageModelOptions.Value.EmbeddingDeploymentName,
+                languageModelOptions.Value.Endpoint, languageModelOptions.Value.ApiKey)
             .Build();
 
         return kernel;
