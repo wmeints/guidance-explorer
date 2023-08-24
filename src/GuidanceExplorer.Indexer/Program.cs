@@ -1,4 +1,6 @@
 ﻿using System.Collections.Immutable;
+using Azure;
+using Azure.AI.OpenAI;
 using GuidanceExplorer.Indexer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.FileSystemGlobbing;
@@ -30,13 +32,21 @@ foreach (var file in results.Files)
 {
     Console.WriteLine($"Indexing {file.Path}");
 
-    using (var reader = new StreamReader(File.OpenRead(Path.Join("Content",file.Path))))
+    using (var reader = new StreamReader(File.OpenRead(Path.Join("Content", file.Path))))
     {
         var sections = MarkdownSectionParser.Parse(reader, file.Path);
 
         for (int index = 0; index < sections.Count; index++)
         {
-            await kernel.Memory.SaveInformationAsync("guidance", sections[index].Content, sections[index].Id);
+            if (String.IsNullOrEmpty(sections[index].Content))
+            {
+                continue;
+            }
+            
+            await kernel.Memory.SaveInformationAsync(
+                collection: "guidance",
+                text: sections[index].Content,
+                id: sections[index].Id);
         }
     }
 }
